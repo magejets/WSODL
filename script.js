@@ -5,6 +5,7 @@
 //Canvas setup
 var stage = document.getElementById("stage");
 var ctx = stage.getContext("2d");
+ctx.canvas.width = window.innerWidth;
 
 //initialize variables
 var time;
@@ -20,6 +21,7 @@ var cameraX;
 var cameraY;
 var realX = stage.width/4;
 var realY = stage.height/2;
+var highScore = 0;
 
 //Keyboard vars
 var up = false;
@@ -30,6 +32,9 @@ var space = false;
 
 //Resets the vars for every time you die
 function resetVars(){
+    if(time > highScore){
+        highScore = time;
+    }
     time = 0;
     map = [];  
     player = new skiier(stage.width/4,stage.height/2,20,30,50,"#770099");
@@ -38,8 +43,8 @@ function resetVars(){
     music.sound.play();
     started = true;
     ended = false;
-    map.push(new block(0,280,240,500,"solid"));
-    map.push(new block(240,280,100,500,"solid"));
+    map.push(new block(0,280,500,500,"solid"));
+    map.push(new block(500,280,100,500,"solid"));
     lastBlock = map[1];
     player.jumpSpeed = 30;
     gravity = 0.5;
@@ -98,6 +103,7 @@ function getSkyColor(t){
     ctx.fillStyle = "#f4c22e";
     ctx.fill();
     ctx.closePath();
+    document.body.style.background = color;
     return color;
 }
 
@@ -126,14 +132,13 @@ function boomyCollisions(){
 //Generates the random terrain
 function makeMap(){
     var maxX = lastBlock.x+lastBlock.width
-    while(realX+480>maxX){
+    while(realX+window.innerWidth>maxX){
         var xBase = lastBlock.x+lastBlock.width;
         var x = xBase+randInt(1,50+Math.floor(time/100));
         var yMax = ((player.jumpSpeed*player.jumpSpeed)/(4*gravity))*(0.1+time/500);
         var y = lastBlock.y+randInt(-1*yMax,.5*yMax);
         var width = randInt(25,200);
         var height = 500;
-        //console.log(yMax);
         var material = "solid";
         map.push(new block(x,y,width,height,material));
         if(randInt(1,15)==10){
@@ -158,6 +163,7 @@ if(started){    //Don't start until the start button is clicked
     ctx.font = "17px Ariel";
     ctx.fillStyle = "#FFFFff";
     ctx.fillText("Time: "+Math.floor(time),10,20);
+    ctx.fillText("High Score: "+Math.floor(highScore),window.innerWidth-180,20);
     time +=0.01;
     makeMap();
     player.speedX = 2;
