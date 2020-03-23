@@ -13,8 +13,7 @@ function sound(src) {
   this.stop = function(){
     this.sound.pause();
   }
-}
-
+}   
 //Block Class
 function block(x,y,width,height,material){
     this.x = x;
@@ -24,7 +23,6 @@ function block(x,y,width,height,material){
     this.material = material;
 
     this.draw = function(){
-        //console.log("drawing block");
         ctx.beginPath();
         ctx.rect(x-cameraX,y-cameraY,width,height);
         if(x==0){
@@ -53,7 +51,6 @@ function skiier(x,y,width,height,skiLength,color){
     this.dead = false;
 
     this.draw = function(){
-        //console.log("drawing");
         ctx.beginPath();
         ctx.rect(this.x,this.y,this.width,this.height);
         ctx.rect((this.x+(this.width/2))-(this.skiLength/2),(this.y+this.height)-5,this.skiLength,5);
@@ -80,7 +77,7 @@ function skiier(x,y,width,height,skiLength,color){
             if(slope >= 8){
                 this.x -= speed;
                 this.y += slope;
-                resetVars();
+                this.kill();
             }
         }
     }
@@ -104,6 +101,8 @@ function skiier(x,y,width,height,skiLength,color){
     }
 
     this.kill = function(){
+        console.log("killing")
+        attempts += 1;
         started = false;
         this.dead = true;
     }
@@ -132,9 +131,7 @@ function Boomerang(x,y){
         ctx.closePath();
     }
     this.update = function(skiier){
-        console.log(this.direction);
         if(this.moving){
-            console.log(skiier.x);
             this.x += this.direction*this.speed;
             if(Math.abs(this.x-realX)>150){
                 this.direction*=-1;
@@ -154,5 +151,38 @@ function Boomerang(x,y){
             this.x = realX;
             this.y = realY;
         }
+    }
+}
+
+function Button(x,y,width,height,text,textColor,color,bufferSize,result){
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.text = "Restart";
+    this.color = color;
+    this.textColor = textColor;
+    this.bufferSize = bufferSize;
+    this.pressed = false;
+
+    this.draw = function(){
+        ctx.beginPath();
+        ctx.fillStyle = this.color;
+        ctx.rect(this.x,this.y,this.width,this.height);
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.font = "15px Comic Sans MS";
+        ctx.fillStyle = this.textColor;
+        //console.log(this.text);
+        ctx.fillText(text,this.x+this.bufferSize*2,this.y+this.bufferSize*2,this.width-2*this.bufferSize);
+        ctx.closePath();
+
+        
+    }
+
+    this.result = function(){
+        result();
     }
 }
