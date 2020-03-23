@@ -14,7 +14,7 @@ var started = false;
 var ended = false;
 var map = [];
 var lastBlock;
-var player;
+var player = new skiier(0,0,0,0,"#FFFFFF");
 var boomerang;
 var gravity;
 var cameraX;
@@ -22,6 +22,8 @@ var cameraY;
 var realX = stage.width/4;
 var realY = stage.height/2;
 var highScore = 0;
+var buttons = [];
+var attempts = 0;
 
 //Keyboard vars
 var up = false;
@@ -29,6 +31,8 @@ var down = false;
 var left = false;
 var right = false;
 var space = false;
+
+
 
 //Resets the vars for every time you die
 function resetVars(){
@@ -51,6 +55,45 @@ function resetVars(){
     cameraX = 0;
     cameraY = 0;
 }
+
+//Shows the screen between deaths
+function startScreen(){
+    //draw all the stuff
+    ctx.clearRect(0,0,stage.width,stage.height);
+    ctx.beginPath();
+    ctx.rect(stage.width/2,stage.height/2,40,60);
+    ctx.rect((stage.width/2+(40/2))-(100/2),(stage.height/2+60)-5,100,5);
+    ctx.moveTo(stage.width/2+40,stage.height/2+60/2);
+    ctx.lineTo(stage.width,stage.height/3);
+    ctx.strokeStyle = "#770099";
+    ctx.stroke();
+    ctx.fillStyle = "#770099";
+    ctx.fill();
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.rect(0,stage.height/2+60,stage.width,stage.height);
+    ctx.fillStyle = "#eec666";
+    ctx.fill();
+    ctx.closePath();
+    ctx.beginPath();
+    if(highScore = 0){
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText("WSODL", stage.width/2, 70);
+        ctx.fill();
+    }
+    ctx.closePath();
+    var message = "Start";
+    if(attempts == 0){
+        message = "Start";
+    }
+    if(attempts>0){
+        message = "Restart";
+    }
+    buttons[0] = new Button(stage.width/2-50,stage.height/2-100,90,30, message, "#FFFFFF", "#61084f", 10 , resetVars );
+    buttons[0].draw();
+}
+
+startScreen();
 
 //Keyboard functions
 function keyDownHandler(e){
@@ -119,7 +162,6 @@ function boomyCollisions(){
     for(var i = 0; i < map.length; i++){
         if(boomerang.x+boomerang.width-cameraX > map[i].x-cameraX && boomerang.x-cameraX < map[i].x+map[i].width-cameraX && 
            boomerang.y+boomerang.height-cameraY > map[i].y-cameraY && boomerang.y-cameraY < map[i].y+map[i].height-cameraY){
-            console.log("wakonda");
             boomerang.direction = -1;
             if(map[i].material == "glass"){
                 map.splice(i,1);
@@ -198,19 +240,43 @@ if(started){    //Don't start until the start button is clicked
     boomerang.draw();
     player.draw();
     drawMap();
-    if(player.dead){
-        ctx.clearRect(0,0,stage.width,stage.height);
-        ctx.font = "69px Ariel";
-        ctx.fillStyle = "#ff0000";
-        ctx.fillText("YOU DIED!", 50,stage.height/2);      
-        music.sound.pause();
-    }
+}else if(player.dead){
+    ctx.clearRect(0,0,stage.width,stage.height);
+    ctx.font = "69px Ariel";
+    ctx.fillStyle = "#ff0000";
+    ctx.fillText("YOU DIED!", 50,stage.height/2);      
+    music.sound.pause();
+    startScreen();
 }
 }
 
 //Keyboard event listeners
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
+//Function to get the mouse position
+function getMousePos(canvas, event) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    };
+}
+//Function to check whether a point is inside a rectangle
+function isInside(pos, rect){
+    return pos.x > rect.x && pos.x < rect.x+rect.width && pos.y < rect.y+rect.height && pos.y > rect.y
+}
+
+//Binding the click event on the canvas
+stage.addEventListener('click', function(evt) {
+    var mousePos = getMousePos(stage, evt);
+
+    for(var i=0; i<buttons.length; i++){
+        if (isInside(mousePos,buttons[i])) {
+            buttons[i].result();
+        }  
+    }
+}, false);
 
 //Make the game loop loop
 setInterval(main,10);
