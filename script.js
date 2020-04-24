@@ -201,7 +201,7 @@ function updateCamera(x,y){
 function main(){
 if(started){    //Don't start until the start button is clicked
     ctx.clearRect(0,0,stage.width,stage.height);
-    document.getElementById("stage").style.background = getSkyColor(time);
+    //document.getElementById("stage").style.background = getSkyColor(time);
     ctx.font = "17px Ariel";
     ctx.fillStyle = "#FFFFff";
     ctx.fillText("Time: "+Math.floor(time),10,20);
