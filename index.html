@@ -6,27 +6,133 @@
         canvas{
             background: rgb(0,0,0);
         }
+    body{
+        font-family: Optima, Courier, Ariel;
+        background-color:#000000;
+        background-image: url('background.png');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        color:#00cc00;
+    }
+    .navbar {
+        overflow: hidden;
+        background-color: #000000;
+        max-height: 68px;
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+    }
 
-        body{
-            background: rgb(0,0,0);
-        }
+    .navbar a {
+        float: left;
+        font-size: 25px;
+        color: #00cc00;
+        text-align: center;
+        padding: 20px 40px;
+        text-decoration: none;
+    }
 
-        a{
-            color:#e8c7a7
-        }
-        a:visited {
-            color: #636;
-        }
+    .dropdown {
+        float: left;
+        overflow: hidden;
+    }
+
+    .dropdown .dropbtn {
+        font-size: 25px;  
+        border: none;
+        outline: none;
+        color: #00cc00;
+        padding: 20px 40px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+    }
+
+    .navbar a:hover, .dropdown:hover .dropbtn {
+        background-color: #00cc00;
+        color: #000000;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #00cc00;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(120,150,120,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        float: none;
+        color: #000000;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #000000;
+        color: #00cc00
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+        position:fixed;
+    }
+    div.centered{
+        background-color:#111111;
+        color:#00cc00;
+        margin-right:10%;
+        margin-left:10%
+    }
+    footer{
+        background-color:#000000;
+        color:#00cc00;
+    }
+    a{
+        color:#00cc00;
+    }
+
+
     </style>
 </head>
 <body>
-    <h1>W.S.O.D.L!</h1>
-    <h2>By Mage J Lewis</h2>
+<div class="navbar">
+    <a href="https://magejets.github.io/Games"><img src="logo.png" width = "48" height = "32"></a>
+    <a href="https://magejets.github.io/Games">Home</a>
+    <div class="dropdown">
+        <button class="dropbtn">Games &#9660</button>
+        <div class="dropdown-content">
+            <a href = "http://magejets.github.io/Potato-Invaders">Potato Invaders</a>
+            <a href = "https://magejets.github.io/Mage-of-the-Dungeons/">Mage of the Dungeons</a>
+            <a href = "https://magejets.github.io/WSODL/">WSODL!</a>  
+        </div>
+    </div>
+</div>
+<div class="centered" align="center">
+    <p>Mage Games</p>
+    <br></br>
+    <h1>W.S.O.D.L.</h1>
     <canvas id = "stage" width = "480" height = "320">This game isn't supported in your browser</canvas>
-    <br>
-    <a href = "https://magejets.github.io/Games/">View my other games here</a>
+    <p text-align:"justify" align="justify">INSTRUCTIONS: Use the UP arrow to jump, and the RIGHT arrow to throw a boomerang, try not to fall into a crevace, or run
+    into a wall</p>
     <script src = "classes.js"></script>
     <script src = "script.js"></script>
     <audio id="myAudio" src="backgroundTunes.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>
+</div>
+<footer>
+    <div class="left-foot-column" align="left">
+        <a href="https://magejets.github.io/Games/" align="left"><img src="logo.png" width="100" height="66"></a>
+        <h2>Mage Games</h2>
+        <h3>A Mage J. Lewis Company</h3>
+        <a href="https://magejets.github.io/About/">About</a>
+        <br></br>
+        <a href="https://github.com/magejets">Github</a>
+        <p>&#169 2020 Mage J. Lewis</p>
+        
+</footer>
 </body>
 </html>
