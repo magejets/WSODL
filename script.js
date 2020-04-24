@@ -5,7 +5,7 @@
 //Canvas setup
 var stage = document.getElementById("stage");
 var ctx = stage.getContext("2d");
-ctx.canvas.width = window.innerWidth;
+//ctx.canvas.width = window.innerWidth;
 
 //initialize variables
 var time;
