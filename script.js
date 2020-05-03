@@ -5,7 +5,7 @@
 //Canvas setup
 var stage = document.getElementById("stage");
 var ctx = stage.getContext("2d");
-//ctx.canvas.width = window.innerWidth;
+//ctx.canvas.width = window.innerWidth*.75;
 
 //initialize variables
 var time;
@@ -61,9 +61,9 @@ function startScreen(){
     //draw all the stuff
     ctx.clearRect(0,0,stage.width,stage.height);
     ctx.beginPath();
-    ctx.rect(stage.width/2,stage.height/2,40,60);
-    ctx.rect((stage.width/2+(40/2))-(100/2),(stage.height/2+60)-5,100,5);
-    ctx.moveTo(stage.width/2+40,stage.height/2+60/2);
+    ctx.rect(stage.width/2-25,stage.height/2,40,60);
+    ctx.rect((stage.width/2+(40/2))-(150/2),(stage.height/2+60)-5,100,5);
+    ctx.moveTo(stage.width/2+40-25,stage.height/2+60/2);
     ctx.lineTo(stage.width,stage.height/3);
     ctx.strokeStyle = "#770099";
     ctx.stroke();
@@ -89,7 +89,7 @@ function startScreen(){
     if(attempts>0){
         message = "Restart";
     }
-    buttons[0] = new Button(stage.width/2-50,stage.height/2-100,90,30, message, "#FFFFFF", "#61084f", 10 , resetVars );
+    buttons[0] = new Button(stage.width/2-45,stage.height/2-50,90,30, message, "#FFFFFF", "#61084f", 10 , resetVars );
     buttons[0].draw();
 }
 
