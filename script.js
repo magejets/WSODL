@@ -197,6 +197,19 @@ function updateCamera(x,y){
     cameraY += y-stage.height/2;
 }
 
+//Saves a high score to the browser cache
+function highScore(){
+
+	if (typeof(Storage) !== "undefined") {
+		if(localStorage.getItem("highScore")== "undefined"){
+			localStorage.setItem("highScore", time);
+		}
+		if(time>localStorage.getItem("highScore")){
+			localStorage.setItem("highScore", time);
+		}
+	}
+}
+
 //Main Game loop
 function main(){
 if(started){    //Don't start until the start button is clicked
@@ -240,6 +253,7 @@ if(started){    //Don't start until the start button is clicked
     boomerang.draw();
     player.draw();
     drawMap();
+    highScore();
 }else if(player.dead){
     ctx.clearRect(0,0,stage.width,stage.height);
     ctx.font = "69px Ariel";
