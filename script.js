@@ -21,7 +21,6 @@ var cameraX;
 var cameraY;
 var realX = stage.width/4;
 var realY = stage.height/2;
-var highScore = 0;
 var buttons = [];
 var attempts = 0;
 
@@ -36,9 +35,6 @@ var space = false;
 
 //Resets the vars for every time you die
 function resetVars(){
-    if(time > highScore){
-        highScore = time;
-    }
     time = 0;
     map = [];  
     player = new skiier(stage.width/4,stage.height/2,20,30,50,"#770099");
@@ -214,11 +210,11 @@ function highScore(){
 function main(){
 if(started){    //Don't start until the start button is clicked
     ctx.clearRect(0,0,stage.width,stage.height);
-    //document.getElementById("stage").style.background = getSkyColor(time);
+    document.getElementById("stage").style.background = getSkyColor(time);
     ctx.font = "17px Ariel";
     ctx.fillStyle = "#FFFFff";
     ctx.fillText("Time: "+Math.floor(time),10,20);
-    ctx.fillText("High Score: "+Math.floor(highScore),window.innerWidth-180,20);
+    ctx.fillText("High Score: "+Math.floor(localStorage.getItem("highScore"),window.innerWidth-180,20);
     time +=0.01;
     makeMap();
     player.speedX = 2;
