@@ -214,7 +214,7 @@ if(started){    //Don't start until the start button is clicked
     ctx.font = "17px Ariel";
     ctx.fillStyle = "#FFFFff";
     ctx.fillText("Time: "+Math.floor(time),10,20);
-    ctx.fillText("High Score: "+Math.floor(localStorage.getItem("highScore"),window.innerWidth-180,20);
+    ctx.fillText("High Score: "+Math.floor(localStorage.getItem("highScore"),window.innerWidth-180,20));
     time +=0.01;
     makeMap();
     player.speedX = 2;
