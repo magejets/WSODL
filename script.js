@@ -5,7 +5,7 @@
 //Canvas setup
 var stage = document.getElementById("stage");
 var ctx = stage.getContext("2d");
-//ctx.canvas.width = window.innerWidth*.75;
+ctx.canvas.width = window.innerWidth*.75;
 
 //initialize variables
 var time;
@@ -169,8 +169,9 @@ function boomyCollisions(){
 
 //Generates the random terrain
 function makeMap(){
-    var maxX = lastBlock.x+lastBlock.width
-    while(realX+window.innerWidth>maxX){
+    var maxX = lastBlock.x + lastBlock.width
+    while(realX + (stage.width * 1.5) > maxX) // when the player gets far enough, make a new block
+    {
         var xBase = lastBlock.x+lastBlock.width;
         var x = xBase+randInt(1,50+Math.floor(time/100));
         var yMax = ((player.jumpSpeed*player.jumpSpeed)/(4*gravity))*(0.1+time/500);
@@ -180,7 +181,8 @@ function makeMap(){
         var material = "solid";
         map.push(new block(x,y,width,height,material));
         if(randInt(1,15)==10){
-            map.push(new block(x+((width)/2),y-100,20,100,"glass"));
+
+            map.push(new block(x+((width)/2), y - 100, 20, 100, "glass"));
         }
         lastBlock = new block(x,y,width,height,material);
         maxX = lastBlock.x+lastBlock.width
@@ -194,7 +196,7 @@ function updateCamera(x,y){
 }
 
 //Saves a high score to the browser cache
-function highScore(){
+function saveHighScore(){
 
 	if (typeof(Storage) !== "undefined") {
 		if(localStorage.getItem("highScore")== "undefined"){
@@ -207,50 +209,89 @@ function highScore(){
 }
 
 //Main Game loop
-function main(){
-if(started){    //Don't start until the start button is clicked
-    ctx.clearRect(0,0,stage.width,stage.height);
-    document.getElementById("stage").style.background = getSkyColor(time);
+function main()
+{
+if(started) //Don't start until the start button is clicked
+{    
+    ctx.clearRect(0,0,stage.width,stage.height); // blank the canvas
+
+    document.getElementById("stage").style.background = getSkyColor(time); // change the time of day
+    
+    // draw the score and high score
+    ctx.beginPath();
     ctx.font = "17px Ariel";
     ctx.fillStyle = "#FFFFff";
-    ctx.fillText("Time: "+Math.floor(time),10,20);
-    ctx.fillText("High Score: "+Math.floor(localStorage.getItem("highScore")),window.innerWidth-180,20));
-    time +=0.01;
-    makeMap();
-    player.speedX = 2;
-    if(Math.abs(player.speedX)>0.2){
+    ctx.fillText("Time: " + Math.floor(time), 10, 20);
+    var high_score = Math.floor(localStorage.getItem("highScore"));
+    ctx.fillText("High Score: " + high_score, stage.width - (80 + (15 * (Math.ceil(Math.log10(high_score + 1))))), 20);
+    ctx.fill();
+    ctx.closePath();
+
+    time +=0.01; // increment the time (1/100 of a second because the frame rate is 100fps)
+
+    makeMap(); // randomly generate the blocks
+
+    player.speedX = 2; // ensure the player is moving right
+    
+    // platform mechanics
+    if(Math.abs(player.speedX)>0.2)
+    {
         player.walk(player.speedX);
     }
-    if(up == true){
-        if(player.falling<3 && player.jumpKey==0){
+    if(up == true)
+    {
+        if(player.falling<3 && player.jumpKey==0)
+        {
             player.speedY = 10;
             player.jumpKey = 1;
         }
-    } else {
+    }
+    else 
+    {
         player.jumpKey = 0;
     }
     player.y -= player.speedY;
-    if(player.speedY<4 || up== true){
+    if(player.speedY<4 || up== true)
+    {
         player.speedY -= gravity;
-    } else {
+    } 
+    else 
+    {
         player.speedY -= gravity*2;
     }
-    if(right && !boomerang.moving){
+    player.touchGround(player.speedY>0);
+
+    // if the right arrow is clicked and the boomerang is in skiier's possession, throw it
+    if(right && !boomerang.moving)
+    {
         boomerang.moving = true;
     }
-    player.touchGround(player.speedY>0);
+
+    // move the camera based on the skiier's movment, and then put them back in place
     updateCamera(player.x,player.y);
     player.x = stage.width/4;
     player.y = stage.height/2;
+    // variables to keep track of the actual coordinates of the player
     realX = cameraX+player.x;
     realY = cameraY+player.y;
+
+    // move, check for collisions, and draw the boomerang
     boomerang.update(player);
     boomyCollisions();
     boomerang.draw();
+
+    // draw the player
     player.draw();
+
+    // draw the blocks
     drawMap();
-    highScore();
-}else if(player.dead){
+
+    // check and see if a new high score has been made. If so, save it.
+    saveHighScore();
+}
+else if(player.dead)
+{
+    // death state
     ctx.clearRect(0,0,stage.width,stage.height);
     ctx.font = "69px Ariel";
     ctx.fillStyle = "#ff0000";
