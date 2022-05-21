@@ -101,7 +101,6 @@ function skiier(x,y,width,height,skiLength,color){
     }
 
     this.kill = function(){
-        console.log("killing")
         attempts += 1;
         started = false;
         this.dead = true;
